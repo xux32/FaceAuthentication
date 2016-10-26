@@ -27,6 +27,7 @@ public class ParameterSetPopupWindow extends PopupWindow{
     }
     private void initPopupWindow(Context mContext, View parent, final ParameterSetInterface parameterSetInterface, int threshold){
 
+        mProgress = threshold;
         View view = LayoutInflater.from(mContext).inflate(R.layout.popupwindow_parameter,null);
         mSeekBar = (SeekBar) view.findViewById(R.id.id_seekbar);
         mThreshold = (TextView) view.findViewById(R.id.id_threshold);
@@ -34,6 +35,7 @@ public class ParameterSetPopupWindow extends PopupWindow{
         mCancel = (Button) view.findViewById(R.id.id_cancel);
 
         mSeekBar.setProgress(threshold);
+        mThreshold.setText("当前阈值：" + mProgress);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -67,7 +69,7 @@ public class ParameterSetPopupWindow extends PopupWindow{
         });
 
         setWidth(1040);
-        setHeight(400);
+        setHeight(450);
         setFocusable(true);
         setContentView(view);
         //实例化一个ColorDrawable颜色为半透明，已达到变暗的效果
@@ -76,6 +78,6 @@ public class ParameterSetPopupWindow extends PopupWindow{
         // 我觉得这里是API的一个bug
 //       setBackgroundDrawable(dw);
 // ;
-        showAtLocation(parent, Gravity.BOTTOM,0,0);
+        showAtLocation(parent, Gravity.BOTTOM,0,50);
     }
 }

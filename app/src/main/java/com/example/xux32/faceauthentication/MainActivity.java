@@ -12,6 +12,8 @@ import android.graphics.Rect;
 import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +45,7 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.LogRecord;
 
 import static com.googlecode.javacv.cpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
@@ -88,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements ImageChooseInterf
     public final static int PICTURE_FLAG_AUTHEN = 2;
 
     private int mThresholdParam = 50;
+
+
+    public Handler mHandle = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == 1){
+                progressDialog.hide();
+                getPopupWindow();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +154,9 @@ public class MainActivity extends AppCompatActivity implements ImageChooseInterf
 //                    showProgressDialog();
 //                    Toast.makeText(MainActivity.this,"正在进行人脸检测，请稍等！",Toast.LENGTH_SHORT).show();
                     progressDialog.show();
-                    initFace();
-                    for (int i = 0; i < mPathList.size(); i++) {
-                        detectFace(i);
-                    }
-                    progressDialog.hide();
-                    getPopupWindow();
+                    mThread.start();
+//                    progressDialog.hide();
+//                    getPopupWindow();
 
                     break;
                 case R.id.id_authentication:
@@ -158,6 +170,21 @@ public class MainActivity extends AppCompatActivity implements ImageChooseInterf
             }
         }
     };
+
+
+
+    Thread mThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            initFace();
+            for (int i = 0; i < mPathList.size(); i++) {
+                detectFace(i);
+            }
+            Message message = new Message();
+            message.what = 1;
+            mHandle.sendMessage(message);
+        }
+    });
 
     private void showProgressDialog(){
         WindowManager.LayoutParams params = progressDialog.getWindow().getAttributes();
@@ -415,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements ImageChooseInterf
             result = result + (double)mResultList.get(i);
             Log.i("比较结果", String.valueOf((double)mResultList.get(i)));
         }
-        result = result/mResultList.size();
+        result = (result*100)/mResultList.size();
         Log.i("比较结果", String.valueOf(result));
         if(result > mThresholdParam){
             Toast.makeText(MainActivity.this, "相似度:" + String.valueOf(result) + "认证通过",Toast.LENGTH_SHORT).show();

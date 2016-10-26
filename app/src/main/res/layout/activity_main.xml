@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buton_shape"
         android:text="拍照"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
         />
     <Button
         android:id="@+id/id_detection"
@@ -32,7 +34,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buton_shape"
         android:text="人脸检测"
-        android:layout_marginTop="3dp"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="5dp"
         />
     <Button
         android:id="@+id/id_authentication"
@@ -40,13 +44,17 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buton_shape"
         android:text="人脸认证"
-        android:layout_marginTop="3dp"/>
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="5dp"/>
     <Button
         android:id="@+id/id_param"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/buton_shape"
         android:text="参数设置"
-        android:layout_marginTop="3dp"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="5dp"
         />
 </LinearLayout>
